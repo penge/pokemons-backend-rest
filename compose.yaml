@@ -1,0 +1,22 @@
+services:
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 5432:5432
+
+  api:
+    container_name: api
+    depends_on:
+      - db
+    build: .
+    ports:
+      - 80:8080
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PASSWORD=${DB_PASSWORD}

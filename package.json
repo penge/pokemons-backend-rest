@@ -1,0 +1,55 @@
+{
+  "name": "backend",
+  "repository": "github:penge/backend-code-challenge",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "dependencies": {
+    "@fastify/caching": "^8.3.0",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^3.0.0",
+    "@mikro-orm/cli": "^6.1.12",
+    "@mikro-orm/core": "^6.1.12",
+    "@mikro-orm/migrations": "^6.1.12",
+    "@mikro-orm/postgresql": "^6.1.12",
+    "@mikro-orm/reflection": "^6.1.12",
+    "@mikro-orm/seeder": "^6.1.12",
+    "fastify": "^4.26.2",
+    "json-schema-to-ts": "^3.0.1",
+    "lodash": "^4.17.21",
+    "node-cache": "^5.1.2",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.6.4",
+    "@orangeopensource/hurl": "^4.2.0",
+    "@types/lodash": "^4.17.0",
+    "@types/node": "^20.12.4",
+    "hygen": "^6.2.11",
+    "nodemon": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "tap": "^18.7.2",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.4.4"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm/config.ts",
+      "./out/mikro-orm/config.js"
+    ]
+  },
+  "scripts": {
+    "generate": "hygen data types",
+    "db:seed": "mikro-orm migration:fresh --seed",
+    "dev": "DB_HOST=localhost NODE_ENV=development nodemon --watch src -e ts --exec ts-node -r tsconfig-paths/register ./src/index.ts",
+    "build": "rimraf out && tsc && tsc-alias",
+    "start": "node out",
+    "lint": "biome lint src",
+    "test:unit": "tap run",
+    "test:api": "hurl --test --glob 'test/**/*.hurl' --variable host=http://[::1]:8080"
+  }
+}
